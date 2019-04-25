@@ -40,6 +40,12 @@ public class Topic_01_CheckEnvironments {
 	  Assert.assertEquals("Home page", homePageTitle);
   }
   
+  @Test
+  public void TC_04_CheckPanel() {
+	  String homePageTitle = driver.getTitle();
+	  Assert.assertEquals("Home page", homePageTitle);
+  }
+  
   @AfterClass
   public void afterClass() {
 	  driver.quit();
