@@ -5,7 +5,6 @@ import org.testng.annotations.BeforeClass;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterClass;
@@ -23,27 +22,13 @@ public class Topic_01_CheckEnvironments {
   }
   
   @Test
-  public void TC_01_CheckUrl() {
-	  String homePageUrl = driver.getCurrentUrl();
-	  Assert.assertEquals("http://live.guru99.com/", homePageUrl);
+  public void TC_01_LoginEmpty() {
+	  
   }
   
   @Test
   public void TC_02_CheckTitle() {
-	  String homePageTitle = driver.getTitle();
-	  Assert.assertEquals("Home page", homePageTitle);
-  }
-  
-  @Test
-  public void TC_03_CheckPanel() {
-	  String homePageTitle = driver.getTitle();
-	  Assert.assertEquals("Home page", homePageTitle);
-  }
-  
-  @Test
-  public void TC_04_CheckPanel() {
-	  String homePageTitle = driver.getTitle();
-	  Assert.assertEquals("Home page", homePageTitle);
+	  
   }
   
   @AfterClass
