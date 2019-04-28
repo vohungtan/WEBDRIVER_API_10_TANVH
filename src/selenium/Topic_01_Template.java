@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterClass;
 
-public class Topic_01_CheckEnvironments {
+public class Topic_01_Template {
 	
   WebDriver driver;
   

@@ -18,9 +18,9 @@ public class Topic_02_Xpath_Css_Part_I {
   @BeforeClass
   public void beforeClass() {
 	  driver = new FirefoxDriver();
-	  driver.get("http://live.guru99.com/");
 	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	  driver.manage().window().maximize();
+	  driver.get("http://live.guru99.com/");
   }
   
   @Test
