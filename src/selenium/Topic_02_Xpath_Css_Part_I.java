@@ -1,15 +1,16 @@
 package selenium;
 
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
+import org.testng.Assert;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterClass;
 
 public class Topic_02_Xpath_Css_Part_I {
 	
@@ -55,6 +56,34 @@ public class Topic_02_Xpath_Css_Part_I {
 	  driver.findElement(By.id("pass")).sendKeys("123123123");
 	  driver.findElement(By.id("send2")).click();
 	  Assert.assertEquals("Invalid login or password.", driver.findElement(By.xpath("//span[text()='Invalid login or password.']")).getText());
+  }
+  
+  @Test
+  public void TC_05_CreateAnAccount() throws InterruptedException {
+	  Random rd = new Random();
+	  int a = rd.nextInt(999);
+	  
+	  String email = "TanVH" + a + "@gmail.com";
+	  System.out.println("Email is: " + email);
+	  
+	  driver.findElement(By.xpath("//div[@class='footer']//a[@title='My Account']")).click();
+	  driver.findElement(By.xpath("//div[@class='col-1 new-users']//a[@href='http://live.guru99.com/index.php/customer/account/create/']")).click();
+	  
+	  driver.findElement(By.id("firstname")).sendKeys("Tan");
+	  driver.findElement(By.id("middlename")).sendKeys("Hung");
+	  driver.findElement(By.id("lastname")).sendKeys("Vo");
+	  driver.findElement(By.id("email_address")).sendKeys(email);
+	  driver.findElement(By.id("password")).sendKeys("123456");
+	  driver.findElement(By.id("confirmation")).sendKeys("123456");
+	  
+	  driver.findElement(By.xpath("//button[@title='Register']")).click();
+	  Assert.assertEquals("Thank you for registering with Main Website Store.", driver.findElement(By.xpath("//li[@class='success-msg']//span[text()='Thank you for registering with Main Website Store.']")).getText());
+	  
+	  driver.findElement(By.xpath("//a[@class='skip-link skip-account']//span[text()='Account']")).click();
+	  driver.findElement(By.xpath("//a[text()='Log Out']")).click();
+	  
+	  Thread.sleep(10000);
+	  Assert.assertTrue(driver.findElement(By.xpath("//h2[contains(text(),'This is demo site for')]")).isDisplayed());
   }
   
   @AfterClass
