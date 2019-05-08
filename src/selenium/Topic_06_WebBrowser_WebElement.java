@@ -7,13 +7,28 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 
 public class Topic_06_WebBrowser_WebElement {
 	
   WebDriver driver;
+  
+  By emailTextBox = By.id("mail");
+  By ageUnder18Radio = By.id("under_18");
+  By eduTextBox = By.id("edu");
+  By jobRole1 = By.id("job1");
+  By interestsDevelopmentRadio = By.id("development");
+  By slider01 = By.id("slider-1");
+  By buttonIsEnabled = By.id("button-enabled");
+  By passwordTextBox = By.id("password");
+  By ageRadioIsDisabled = By.id("radio-disabled");
+  By bioTextBox = By.id("bio");
+  By jobRole2 = By.id("job2");
+  By interestsCheckboxDisabled = By.id("check-disbaled");
+  By slider02 = By.id("slider-2");
+  By buttonIsDisabled = By.id("button-disabled");
   
   @BeforeClass
   public void beforeClass() {
@@ -24,24 +39,52 @@ public class Topic_06_WebBrowser_WebElement {
   }
   
   @Test
-  public void TC_01_KiemTraPhanTuDisplayed() {
+  public void TC_01_KiemTraPhanTuDisplayed() throws InterruptedException {
 	  
-	  if(driver.findElement(By.id("mail")).isDisplayed()) {
-		  driver.findElement(By.id("mail")).sendKeys("Automation Testing");
+	  if(isElementDisplayed(emailTextBox)) {
+		  sendKeyToElement(emailTextBox, "Automation Testing");
 	  }
 	  
-	  if(driver.findElement(By.id("under_18")).isDisplayed()) {
-		  driver.findElement(By.id("under_18")).click();
+	  if(isElementDisplayed(ageUnder18Radio)) {
+		  clickToElement(ageUnder18Radio);
+		  
 	  }
 	  
-	  if(driver.findElement(By.id("edu")).isDisplayed()) {
-		  driver.findElement(By.id("edu")).sendKeys("Automation Testing");
+	  if(isElementDisplayed(eduTextBox)) {
+		  sendKeyToElement(eduTextBox, "Automation Testing");
+	  }
+	  
+	  Thread.sleep(5000);
+  }
+  
+  @Test
+  public void TC_02_KiemTraPhanTu() {
+	  
+	  if(isElementEnabled(emailTextBox)) {
+		  
 	  }
 	  
   }
   
-  public void TC_02_CheckTitle() {
+  public boolean isElementDisplayed(By by) {
+	WebElement element = driver.findElement(by);
+	return element.isDisplayed();
 	  
+  }
+  
+  public boolean isElementEnabled(By by) {
+	  WebElement element = driver.findElement(by);
+	  return element.isEnabled();
+  }
+  
+  public void clickToElement(By by) {
+	  WebElement element = driver.findElement(by);
+	  element.click();
+  }
+  
+  public void sendKeyToElement(By by, String value) {
+	  WebElement element = driver.findElement(by);
+	  element.sendKeys(value);
   }
   
   @AfterClass
