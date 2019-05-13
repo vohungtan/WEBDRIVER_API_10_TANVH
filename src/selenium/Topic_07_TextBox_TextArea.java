@@ -73,7 +73,7 @@ public class Topic_07_TextBox_TextArea {
 	  driver.findElement(By.xpath("//input[@name='telephoneno']")).sendKeys("0123456987");
 	  
 	  driver.findElement(By.xpath("//input[@name='emailid']")).clear();
-	  driver.findElement(By.xpath("//input[@name='emailid']")).sendKeys("abc12345@gmail.com");
+	  driver.findElement(By.xpath("//input[@name='emailid']")).sendKeys("abc1122@gmail.com");
 	  
 	  driver.findElement(By.xpath("//input[@name='password']")).clear();
 	  driver.findElement(By.xpath("//input[@name='password']")).sendKeys("123123");
@@ -110,7 +110,7 @@ public class Topic_07_TextBox_TextArea {
 	  Assert.assertEquals(mobileNumber, "0123456987");
 	  
 	  email = driver.findElement(By.xpath("//td[text()='Email']/following-sibling::td")).getText();
-	  Assert.assertEquals(email, "abc12345@gmail.com");
+	  Assert.assertEquals(email, "abc1122@gmail.com");
 	  
 	  //Step 7
 	  driver.findElement(By.xpath("//a[text()='Edit Customer']")).click();
@@ -120,12 +120,53 @@ public class Topic_07_TextBox_TextArea {
 	  //Step 8
 	  Assert.assertEquals(customerName, "Selenium Online");
 	  Assert.assertEquals(address, "123 Address");
+	  
+	  //Step 9
+	  driver.findElement(By.xpath("//textarea[@name='addr']")).clear();
+	  driver.findElement(By.xpath("//textarea[@name='addr']")).sendKeys("Edit 123 Address");
+	  
+	  driver.findElement(By.xpath("//input[@name='city']")).clear();
+	  driver.findElement(By.xpath("//input[@name='city']")).sendKeys("Edit Ho Chi Minh");
+	  
+	  driver.findElement(By.xpath("//input[@name='state']")).clear();
+	  driver.findElement(By.xpath("//input[@name='state']")).sendKeys("Edit Thu Duc");
+	  
+	  driver.findElement(By.xpath("//input[@name='pinno']")).clear();
+	  driver.findElement(By.xpath("//input[@name='pinno']")).sendKeys("654321");
+	  
+	  driver.findElement(By.xpath("//input[@name='telephoneno']")).clear();
+	  driver.findElement(By.xpath("//input[@name='telephoneno']")).sendKeys("0123456789");
+	  
+	  driver.findElement(By.xpath("//input[@name='emailid']")).clear();
+	  driver.findElement(By.xpath("//input[@name='emailid']")).sendKeys("abc123@gmail.com");
+	  
+	  driver.findElement(By.xpath("//input[@value='Submit']")).click();
+	  
+	  //Step 10
+	  address = driver.findElement(By.xpath("//td[text()='Address']/following-sibling::td")).getText();
+	  Assert.assertEquals(address, "Edit 123 Address");
+	  
+	  city = driver.findElement(By.xpath("//td[text()='City']/following-sibling::td")).getText();
+	  Assert.assertEquals(city, "Edit Ho Chi Minh");
+	  
+	  state = driver.findElement(By.xpath("//td[text()='State']/following-sibling::td")).getText();
+	  Assert.assertEquals(state, "Edit Thu Duc");
+	  
+	  pin = driver.findElement(By.xpath("//td[text()='Pin']/following-sibling::td")).getText();
+	  Assert.assertEquals(pin, "654321");
+	  
+	  mobileNumber = driver.findElement(By.xpath("//td[text()='Mobile No.']/following-sibling::td")).getText();
+	  Assert.assertEquals(mobileNumber, "0123456789");
+	  
+	  email = driver.findElement(By.xpath("//td[text()='Email']/following-sibling::td")).getText();
+	  Assert.assertEquals(email, "abc123@gmail.com");
+	  
   }
   
   
   @AfterClass
   public void afterClass() {
-	  //driver.quit();
+	  driver.quit();
   }
 
 }
