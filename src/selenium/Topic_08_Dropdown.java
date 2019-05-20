@@ -1,11 +1,5 @@
 package selenium;
 
-import org.testng.annotations.Test;
-
-import com.google.common.base.Predicate;
-
-import org.testng.annotations.BeforeClass;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +13,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 public class Topic_08_Dropdown {
   WebDriver driver;
@@ -93,7 +89,73 @@ public class Topic_08_Dropdown {
 	  
   }
   
+  @Test
+  public void TC_04_MultiSelectInDropDown() throws Exception {
+	  //Step 1
+	  driver.get("http://multiple-select.wenzhixin.net.cn/examples/#basic.html");
+	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	  
+	  String[] itemSelected= {"January","February","March"};
+	  selectMultiInDropdown("//div[@class='ms-parent ']//button", "//div[@class='ms-drop bottom']//span", itemSelected);
+  }
   
+  public void selectMultiInDropdown(String parentXpath, String allItemXpath, String[] expectedValueItem) throws Exception {
+	  
+	  By contentIframeXpath = By.xpath("//div[@class='content']/iframe");
+		
+	  WebElement contentIframe = driver.findElement(contentIframeXpath);
+      driver.switchTo().frame(contentIframe);
+	  
+	  WebElement parentDropdown = driver.findElement(By.xpath(parentXpath));
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", parentDropdown);
+	  
+	  WebDriverWait wait = new WebDriverWait(driver, 30);
+	  wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(allItemXpath)));
+	  
+	  List<WebElement> allItemsElement = driver.findElements(By.xpath(allItemXpath));
+	  System.out.println("Tong so phan tu trong drop down:" + allItemsElement.size());
+	  
+	  for(WebElement childElement:allItemsElement) {
+		  for(String item:expectedValueItem) {
+			  if(childElement.getText().contains(item)) {
+				  ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", childElement);
+				  Thread.sleep(3000);
+				  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", childElement);
+				  Thread.sleep(3000);
+				  
+				  List<WebElement> itemSelected = driver.findElements(By.xpath("//li[@class='selected']//input"));
+				  System.out.println("Item selected is: " + itemSelected.size());
+				  if(expectedValueItem.length==itemSelected.size()) {
+					  break;
+				  }
+			  }
+		  }
+	  }
+	  
+  }
+  
+  public boolean checkItemSelected(String[] itemSelectedText) {
+	
+	  List<WebElement> itemSelected = driver.findElements(By.xpath("//li[@class='selected']//input"));
+	  
+	  int numberItemSelected = itemSelected.size();
+	  
+	  String allItemsSelectedText = driver.findElement(By.xpath("//div[@class='ms-drop bottom']//span")).getText();
+	  System.out.println("Text đã chọn: " + allItemsSelectedText);
+	  
+	  if(numberItemSelected <= 3 && numberItemSelected > 0) {
+		  for(String item : itemSelectedText) {
+			  if(allItemsSelectedText.contains(item)) {
+				  break;
+			  }
+		  }
+		  return true;
+	  }else {
+		return driver.findElement(By.xpath("//button[@class='ms-choice']/span[text()='" + numberItemSelected + " of 12 selected']")).isDisplayed();  
+	  }
+	  
+  }
+    
   public void selectItemInDropdown(String parentLocator, String allItemsInDropdown, String expectedText) {
 	  WebElement parentElement = driver.findElement(By.xpath(parentLocator));
 	  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", parentElement);
@@ -103,12 +165,17 @@ public class Topic_08_Dropdown {
 	  
 	  List <WebElement> allItemsElement = driver.findElements(By.xpath(allItemsInDropdown));
 	  
-	  for (int i = 0; i < allItemsElement.size(); i++) {
-		  String itemText = allItemsElement.get(i).getText();
-		  if (itemText.equals(expectedText)) {
-			  ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", allItemsElement.get(i));
-			  allItemsElement.get(i).click();
+	  for (WebElement childElement:allItemsElement) {
+		  System.out.println("Text moi lan get: " + childElement.getText());
+		  if (childElement.getText().contains(expectedText)) {
+			  if(childElement.isDisplayed()) {
+				  childElement.click();
+			  }
+			  else {
+			  ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", childElement);
+			  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", childElement);
 			  break;
+			  }
 		  }
 	  }
 	  
