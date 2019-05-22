@@ -6,6 +6,7 @@ import org.testng.annotations.BeforeClass;
 
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -27,7 +28,6 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  executor = (JavascriptExecutor) driver;
   }
   
-  @Test
   public void TC_01_JavascriptExecutor() throws Exception {
 	  
 	  driver.get("http://live.guru99.com/");
@@ -47,7 +47,6 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  Assert.assertEquals(driver.getCurrentUrl(), "http://live.guru99.com/index.php/customer/account/create/");
   }
   
-  @Test
   public void TC_02_Checkbox() throws Exception {
 	  driver.get("http://demos.telerik.com/kendo-ui/styling/checkboxes");
 	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -66,7 +65,6 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  
   }  
   
-  @Test
   public void TC_03_Radiobutton() throws Exception {
 	  driver.get("http://demos.telerik.com/kendo-ui/styling/radios");
 	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -84,9 +82,61 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  
   } 
   
+  @Test
+  public void TC_04_AcceptAlert() throws Exception {
+	  driver.get("https://daominhdam.github.io/basic-form/index.html");
+	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	  
+	  WebElement jsAlertButton = driver.findElement(By.xpath("//button[text()='Click for JS Alert']"));
+	  
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", jsAlertButton);
+	  Thread.sleep(2000);
+	  
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", jsAlertButton);
+	  //jsAlertButton.click();
+	  Thread.sleep(2000);
+	  
+	  Alert alert = driver.switchTo().alert();
+	  
+	  String textOnAlert = alert.getText();
+	  
+	  Assert.assertEquals(textOnAlert, "I am a JS Alert");
+	  
+	  alert.accept();
+	  
+	  Assert.assertEquals(driver.findElement(By.xpath("//p[text()='You clicked an alert successfully ']")).getText(), "You clicked an alert successfully");
+	  
+  }
+  
+  
+  public void TC_05_ConfirmAlert() throws Exception {
+	  driver.get("https://daominhdam.github.io/basic-form/index.html");
+	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	  
+	  WebElement jsConfirmButton = driver.findElement(By.xpath("//button[text()='Click for JS Confirm']"));
+	  
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", jsConfirmButton);
+	  Thread.sleep(2000);
+	  
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", jsConfirmButton);
+	  //jsConfirmButton.click();
+	  Thread.sleep(2000);
+	  
+	  Alert alert = driver.switchTo().alert();
+	  
+	  String textOnAlert = alert.getText();
+	  
+	  Assert.assertEquals(textOnAlert, "I am a JS Confirm");
+	  
+	  alert.dismiss();
+	  
+	  Assert.assertEquals(driver.findElement(By.xpath("//p[text()='You clicked: Cancel']")).getText(), "You clicked: Cancel");
+	  
+  }
+  
   @AfterClass
   public void afterClass() {
-	  driver.quit();
+	  //driver.quit();
   }
 
 }
