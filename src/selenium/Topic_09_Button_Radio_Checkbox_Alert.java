@@ -28,6 +28,7 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  executor = (JavascriptExecutor) driver;
   }
   
+  @Test
   public void TC_01_JavascriptExecutor() throws Exception {
 	  
 	  driver.get("http://live.guru99.com/");
@@ -47,6 +48,7 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  Assert.assertEquals(driver.getCurrentUrl(), "http://live.guru99.com/index.php/customer/account/create/");
   }
   
+  @Test
   public void TC_02_Checkbox() throws Exception {
 	  driver.get("http://demos.telerik.com/kendo-ui/styling/checkboxes");
 	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -65,6 +67,7 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  
   }  
   
+  @Test
   public void TC_03_Radiobutton() throws Exception {
 	  driver.get("http://demos.telerik.com/kendo-ui/styling/radios");
 	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -108,7 +111,7 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  
   }
   
-  
+  @Test
   public void TC_05_ConfirmAlert() throws Exception {
 	  driver.get("https://daominhdam.github.io/basic-form/index.html");
 	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -131,6 +134,47 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 	  alert.dismiss();
 	  
 	  Assert.assertEquals(driver.findElement(By.xpath("//p[text()='You clicked: Cancel']")).getText(), "You clicked: Cancel");
+	  
+  }
+  
+  @Test
+  public void TC_06_PromptAlert() throws Exception {
+	  driver.get("https://daominhdam.github.io/basic-form/index.html");
+	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	  
+	  WebElement jsPromptButton = driver.findElement(By.xpath("//button[text()='Click for JS Prompt']"));
+	  
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", jsPromptButton);
+	  Thread.sleep(2000);
+	  
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", jsPromptButton);
+	  //jsConfirmButton.click();
+	  Thread.sleep(2000);
+	  
+	  Alert alert = driver.switchTo().alert();
+	  
+	  String textOnAlert = alert.getText();
+	  
+	  Assert.assertEquals(textOnAlert, "I am a JS prompt");
+	  
+	  alert.sendKeys("vohungtan");
+	  
+	  alert.accept();
+	  
+	  Assert.assertEquals(driver.findElement(By.xpath("//p[text()='You entered: vohungtan']")).getText(), "You entered: vohungtan");
+	  
+  }
+  
+  @Test
+  public void TC_07_AuthenticationAlert() {
+	  
+	  String url = "http://the-internet.herokuapp.com/basic_auth";
+			  
+	  url = "http://admin:admin@the-internet.herokuapp.com/basic_auth";
+	  
+	  driver.get(url);
+	  
+	  Assert.assertEquals(driver.findElement(By.xpath("//div[@class='example']//p")).getText(), "Congratulations! You must have the proper credentials.");
 	  
   }
   
