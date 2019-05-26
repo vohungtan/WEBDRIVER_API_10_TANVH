@@ -4,9 +4,11 @@ import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -23,8 +25,8 @@ public class Topic_11_Popup_Iframe_Frame {
 	  driver.manage().window().maximize();
   }
   
-  @Test
-  public void TC_01_LoginEmpty() { 
+
+  public void TC_01() { 
 	  driver.get("http://www.hdfcbank.com/");
 	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	  
@@ -48,6 +50,68 @@ public class Topic_11_Popup_Iframe_Frame {
 	  }
   }
   
+  
+  @Test
+  public void TC_02() throws Exception { 
+	  driver.get("https://daominhdam.github.io/basic-form/index.html");
+	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	  
+	  String parentID = driver.getWindowHandle();
+	  
+	  WebElement googleLink = driver.findElement(By.xpath("//a[@href='https://google.com.vn']"));
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", googleLink);
+	  googleLink.click();
+	  
+	  switchToWindowByTitle("Google");
+	  Assert.assertEquals(driver.getTitle(), "Google");
+	  
+	  switchToWindowByTitle("SELENIUM WEBDRIVER FORM DEMO");
+	  Thread.sleep(3000);
+	  
+	  WebElement tikiLink = driver.findElement(By.xpath("//a[@href='https://tiki.vn']"));
+	  ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", tikiLink);
+	  tikiLink.click();	  
+	  switchToWindowByTitle("Mua Hàng Trực Tuyến Uy Tín với Giá Rẻ Hơn tại Tiki.vn");
+	  Assert.assertEquals(driver.getTitle(), "Mua Hàng Trực Tuyến Uy Tín với Giá Rẻ Hơn tại Tiki.vn");
+	  
+	  closeAllWindowsWithoutParent(parentID);
+	  
+	  Assert.assertEquals(driver.getTitle(), "SELENIUM WEBDRIVER FORM DEMO");
+  }
+  
+  @Test
+  public void TC_03() {
+	  driver.get("http://www.hdfcbank.com/");
+	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+  }
+  
+  
+  public void switchToWindowByTitle(String title) {
+	  Set<String> allWindows = driver.getWindowHandles();
+	  for(String runWindow:allWindows) {	  
+		  driver.switchTo().window(runWindow);
+		  String currentWin = driver.getTitle();
+		  if(currentWin.equals(title)) {
+			  break;
+		  }
+	  }
+  }
+  
+  public boolean closeAllWindowsWithoutParent(String parentID) {
+	  Set<String> allWindows = driver.getWindowHandles();
+	  for(String runWindow:allWindows) {
+		  if(!runWindow.equals(parentID)) {
+			  driver.switchTo().window(runWindow);
+			  driver.close();
+		  }
+	  }
+	  driver.switchTo().window(parentID);
+	  if(driver.getWindowHandles().size() == 1) {
+		  return true;
+	  }
+	  else
+		  return false;
+  }
   
   @AfterClass
   public void afterClass() {
