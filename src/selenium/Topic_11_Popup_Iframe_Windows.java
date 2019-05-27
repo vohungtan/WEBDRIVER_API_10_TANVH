@@ -15,8 +15,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 
-public class Topic_11_Popup_Iframe_Frame {
-	
+public class Topic_11_Popup_Iframe_Windows {
+    
   WebDriver driver;
   
   @BeforeClass
@@ -51,7 +51,7 @@ public class Topic_11_Popup_Iframe_Frame {
   }
   
   
-  @Test
+  
   public void TC_02() throws Exception { 
 	  driver.get("https://daominhdam.github.io/basic-form/index.html");
 	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -79,12 +79,67 @@ public class Topic_11_Popup_Iframe_Frame {
 	  Assert.assertEquals(driver.getTitle(), "SELENIUM WEBDRIVER FORM DEMO");
   }
   
-  @Test
-  public void TC_03() {
+  
+  public void TC_03() throws Exception {
 	  driver.get("http://www.hdfcbank.com/");
 	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	  
+	  String parentID = driver.getWindowHandle();
+	  
+	  WebElement popBanner = driver.findElement(By.xpath("//img[@class='popupbanner at-element-click-tracking']")); 
+	  
+	  if (popBanner.isDisplayed()) {
+		  driver.findElement(By.xpath("//img[@class='popupCloseButton']")).click();
+	  } 
+	  
+	  driver.findElement(By.xpath("//a[text()='Agri']")).click();
+	  switchToWindowByTitle("HDFC Bank Kisan Dhan Vikas e-Kendra");
+	  Thread.sleep(3000);
+	  
+	  driver.findElement(By.xpath("//img[@src='images/thumb/3.png']/following-sibling::div//p[text()='Account Details']")).click();
+	  switchToWindowByTitle("Welcome to HDFC Bank NetBanking");
+	  Thread.sleep(3000);
+	  
+	  WebElement iframe = driver.findElement(By.xpath("//frame[@name='footer']"));
+	  driver.switchTo().frame(iframe);
+	  driver.findElement(By.xpath("//a[text()='Privacy Policy']")).click();
+	  switchToWindowByTitle("HDFC Bank - Leading Bank in India, Banking Services, Private Banking, Personal Loan, Car Loan");
+	  Thread.sleep(3000);
+	  
+	  driver.findElement(By.xpath("//a[@title='Corporate Social Responsibility']")).click();
+	  
+	  closeAllWindowsWithoutParent(parentID);
+	  switchToWindowByTitle("HDFC Bank: Personal Banking Services");
+
   }
   
+  @Test
+  public void TC_04() throws Exception {
+	  driver.get("http://live.guru99.com/index.php/");
+	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	  
+	  driver.findElement(By.xpath("//a[text()='Mobile']")).click();
+	  Thread.sleep(3000);
+	  
+	  String parentID = driver.getWindowHandle();
+	  
+	  WebElement addToSonyXperia = driver.findElement(By.xpath("//ul[@class='add-to-links']//a[text()='Add to Compare' and contains(@href, 'add/product/1/uenc/')]"));
+	  
+	  addToSonyXperia.click();
+	  
+	  WebElement addToSamsungGalaxy = driver.findElement(By.xpath("//ul[@class='add-to-links']//a[text()='Add to Compare' and contains(@href, 'add/product/3/uenc/')]"));
+	  
+	  addToSamsungGalaxy.click();
+	  
+	  driver.findElement(By.xpath("//button[@title='Compare']")).click();
+	  
+	  switchToWindowByTitle("Products Comparison List - Magento Commerce");
+	  
+	  Assert.assertEquals(driver.getTitle(), "Products Comparison List - Magento Commerce");
+	  
+	  closeAllWindowsWithoutParent(parentID);
+	  
+  }
   
   public void switchToWindowByTitle(String title) {
 	  Set<String> allWindows = driver.getWindowHandles();
@@ -117,5 +172,4 @@ public class Topic_11_Popup_Iframe_Frame {
   public void afterClass() {
 	  //driver.quit();
   }
-
 }
