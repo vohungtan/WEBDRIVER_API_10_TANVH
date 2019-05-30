@@ -123,13 +123,9 @@ public class Topic_11_Popup_Iframe_Windows {
 	  
 	  String parentID = driver.getWindowHandle();
 	  
-	  WebElement addToSonyXperia = driver.findElement(By.xpath("//ul[@class='add-to-links']//a[text()='Add to Compare' and contains(@href, 'add/product/1/uenc/')]"));
+	  driver.findElement(By.xpath("(//ul[@class='add-to-links']//a[text()='Add to Compare'])[1]")).click();;
 	  
-	  addToSonyXperia.click();
-	  
-	  WebElement addToSamsungGalaxy = driver.findElement(By.xpath("//ul[@class='add-to-links']//a[text()='Add to Compare' and contains(@href, 'add/product/3/uenc/')]"));
-	  
-	  addToSamsungGalaxy.click();
+	  driver.findElement(By.xpath("(//ul[@class='add-to-links']//a[text()='Add to Compare'])[3]")).click();;
 	  
 	  driver.findElement(By.xpath("//button[@title='Compare']")).click();
 	  
