@@ -86,11 +86,14 @@ public class Topic_11_Popup_Iframe_Windows {
 	  
 	  String parentID = driver.getWindowHandle();
 	  
-	  WebElement popBanner = driver.findElement(By.xpath("//img[@class='popupbanner at-element-click-tracking']")); 
+	  List <WebElement> popBanner = driver.findElements(By.xpath("//img[@class='popupbanner at-element-click-tracking']")); 
 	  
-	  if (popBanner.isDisplayed()) {
+	  if (popBanner.size() >= 1 && popBanner.get(0).isDisplayed()) {
 		  driver.findElement(By.xpath("//img[@class='popupCloseButton']")).click();
-	  } 
+		  Assert.assertFalse(popBanner.get(0).isDisplayed());
+	  } else if (popBanner.size() >=1 && !popBanner.get(0).isDisplayed()) {
+		  System.out.println("Size >= 1: Present, co trong DOM khong hien thi tren site");
+	  }
 	  
 	  driver.findElement(By.xpath("//a[text()='Agri']")).click();
 	  switchToWindowByTitle("HDFC Bank Kisan Dhan Vikas e-Kendra");
@@ -123,9 +126,13 @@ public class Topic_11_Popup_Iframe_Windows {
 	  
 	  String parentID = driver.getWindowHandle();
 	  
-	  driver.findElement(By.xpath("(//ul[@class='add-to-links']//a[text()='Add to Compare'])[1]")).click();;
+	  driver.findElement(By.xpath("(//ul[@class='add-to-links']//a[text()='Add to Compare'])[1]")).click();
 	  
-	  driver.findElement(By.xpath("(//ul[@class='add-to-links']//a[text()='Add to Compare'])[3]")).click();;
+	  Assert.assertEquals(driver.findElement(By.xpath("//li[@class='success-msg']//span")).getText(), "The product Sony Xperia has been added to comparison list.");
+	  
+	  driver.findElement(By.xpath("(//ul[@class='add-to-links']//a[text()='Add to Compare'])[3]")).click();
+	  
+	  Assert.assertEquals(driver.findElement(By.xpath("//li[@class='success-msg']//span")).getText(), "The product Samsung Galaxy has been added to comparison list.");
 	  
 	  driver.findElement(By.xpath("//button[@title='Compare']")).click();
 	  
