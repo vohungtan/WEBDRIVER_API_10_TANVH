@@ -40,7 +40,7 @@ public class Topic_13_Javascript {
 
 	}
 
-	@Test
+	// @Test
 	public void TC_01_JavascriptExecutor() {
 
 		// Step 1
@@ -111,60 +111,46 @@ public class Topic_13_Javascript {
 		driver.findElement(By.xpath("//a[text()='New Customer']")).click();
 
 		// Step 4
-		inputText("//input[@name='name']","Selenium Online");
+		inputText("//input[@name='name']", "Selenium Online");
 		driver.findElement(By.xpath("//input[@value='f']")).click();
 
 		WebElement dateOfBirthPicker = driver.findElement(By.xpath("//input[@name='dob']"));
 		removeAttributeInDOM(dateOfBirthPicker, "type");
 		driver.findElement(By.xpath("//input[@name='dob']")).sendKeys("10/01/2000");
 
-		inputText("//textarea[@name='addr']","123 Address");
-		inputText("//input[@name='city']","Ho Chi Minh");
-		inputText("//input[@name='state']","Thu Duc");
-		inputText("///input[@name='pinno']","123456");
-		inputText("//input[@name='telephoneno']","0123456987");
-		inputText("//input[@name='emailid']","abc1125@gmail.com");
-		inputText("//input[@name='password']","123123");
+		inputText("//textarea[@name='addr']", "123 Address");
+		inputText("//input[@name='city']", "Ho Chi Minh");
+		inputText("//input[@name='state']", "Thu Duc");
+		inputText("//input[@name='pinno']", "123456");
+		inputText("//input[@name='telephoneno']", "0123456987");
+		inputText("//input[@name='emailid']", "abc1126@gmail.com");
+		inputText("//input[@name='password']", "123123");
 
 		driver.findElement(By.xpath("//input[@value='Submit']")).click();
 
 		// Step 6
-		customerName = driver.findElement(By.xpath("//td[text()='Customer Name']/following-sibling::td")).getText();
-		Assert.assertEquals(customerName, "Selenium Online");
-
-		gender = driver.findElement(By.xpath("//td[text()='Gender']/following-sibling::td")).getText();
-		Assert.assertEquals(gender, "female");
-
-		dateOfBirth = driver.findElement(By.xpath("//td[text()='Birthdate']/following-sibling::td")).getText();
-		Assert.assertEquals(dateOfBirth, "2000-10-01");
-
-		address = driver.findElement(By.xpath("//td[text()='Address']/following-sibling::td")).getText();
-		Assert.assertEquals(address, "123 Address");
-
-		city = driver.findElement(By.xpath("//td[text()='City']/following-sibling::td")).getText();
-		Assert.assertEquals(city, "Ho Chi Minh");
-
-		state = driver.findElement(By.xpath("//td[text()='State']/following-sibling::td")).getText();
-		Assert.assertEquals(state, "Thu Duc");
-
-		pin = driver.findElement(By.xpath("//td[text()='Pin']/following-sibling::td")).getText();
-		Assert.assertEquals(pin, "123456");
-
-		mobileNumber = driver.findElement(By.xpath("//td[text()='Mobile No.']/following-sibling::td")).getText();
-		Assert.assertEquals(mobileNumber, "0123456987");
-
-		email = driver.findElement(By.xpath("//td[text()='Email']/following-sibling::td")).getText();
-		Assert.assertEquals(email, "abc1125@gmail.com");
+		assertText("//td[text()='Customer Name']/following-sibling::td", "Selenium Online");
+		assertText("//td[text()='Gender']/following-sibling::td", "female");
+		assertText("//td[text()='Birthdate']/following-sibling::td", "2000-10-01");
+		assertText("//td[text()='Address']/following-sibling::td", "123 Address");
+		assertText("//td[text()='City']/following-sibling::td", "Ho Chi Minh");
+		assertText("//td[text()='State']/following-sibling::td", "Thu Duc");
+		assertText("//td[text()='Pin']/following-sibling::td", "123456");
+		assertText("//td[text()='Mobile No.']/following-sibling::td", "0123456987");
+		assertText("//td[text()='Email']/following-sibling::td", "abc1126@gmail.com");
 
 	}
 
-	@Test
+	public void assertText(String xpathElement, String expectedText) {
+		Assert.assertEquals(driver.findElement(By.xpath(xpathElement)).getText(), expectedText);
+	}
+
+	// @Test
 	public void TC_03_CreateAccount() throws Exception {
 		// Step 1
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.location='http://live.guru99.com/'");
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		
 
 		// Step 2
 		WebElement myAccountLink = driver.findElement(By.xpath("//div[@class='footer']//a[@title='My Account']"));
@@ -179,8 +165,8 @@ public class Topic_13_Javascript {
 		Random rd = new Random();
 		int a = rd.nextInt(999);
 		String email = "Demo" + a + "@gmail.com";
-		
-		//Step 5
+
+		// Step 5
 		sendkeyToElementByJS(driver.findElement(By.id("firstname")), "Tan");
 		sendkeyToElementByJS(driver.findElement(By.id("middlename")), "Hung");
 		sendkeyToElementByJS(driver.findElement(By.id("lastname")), "Vo");
@@ -190,25 +176,25 @@ public class Topic_13_Javascript {
 		WebElement registerButton = driver.findElement(By.xpath("//button[@title='Register']"));
 		js.executeScript("arguments[0].click();", registerButton);
 		verifyTextInInnerText("Thank you for registering with Main Website Store.");
-		
-		//Step 6
+
+		// Step 6
 		WebElement logoutButton = driver.findElement(By.xpath("//a[text()='Log Out']"));
 		js.executeScript("arguments[0].click();", logoutButton);
 		Thread.sleep(10000);
-		
-		//Step 7
+
+		// Step 7
 		verifyTextInInnerText("This is demo site for");
 
 	}
-	
+
 	public void inputText(String xpathElement, String inputText) {
 		driver.findElement(By.xpath(xpathElement)).clear();
 		driver.findElement(By.xpath(xpathElement)).sendKeys(inputText);
 	}
-	
+
 	public Object sendkeyToElementByJS(WebElement element, String value) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		return js.executeScript("arguments[0].setAttribute('value', '"+ value + "')", element);
+		return js.executeScript("arguments[0].setAttribute('value', '" + value + "')", element);
 	}
 
 	public Object removeAttributeInDOM(WebElement element, String attributeRemove) {
