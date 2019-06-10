@@ -3,8 +3,10 @@ package selenium;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
+import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +42,7 @@ public class Topic_14_UploadFile {
 	  System.out.println(image_03_Path);
   }
   
-  @Test
+  //@Test
   public void TC_01_UploadFileBySendKeys() throws Exception {
 	  //Step 1
 	  driver.get("http://blueimp.github.com/jQuery-File-Upload/");
@@ -81,6 +83,10 @@ public class Topic_14_UploadFile {
   
   @Test
   public void TC_03_Robot() throws Exception {
+	  //Step 1
+	  driver.get("http://blueimp.github.com/jQuery-File-Upload/");
+	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	  
 	  //Click on 'Add files' to open file dialog
 	  WebElement uploadChrome = driver.findElement(By.cssSelector(".fileinput-button"));
 	  uploadChrome.click();
@@ -91,6 +97,46 @@ public class Topic_14_UploadFile {
 	  //Copy to clipboard
 	  Toolkit.getDefaultToolkit().getSystemClipboard().setContents(select, null);
 	  
+	  if(driver.toString().contains("chrome") || driver.toString().contains("firefox")) {
+		  WebElement uploadFile = driver.findElement(By.cssSelector(".fileinput-button"));
+		  uploadFile.click();
+		  Thread.sleep(1000);
+	  } else {
+		  System.out.println("Go to IE");
+		  WebElement uploadFile = driver.findElement(By.xpath("//input[@type='file']"));
+		  clickToElementByJS(uploadFile);
+	  }
+	  
+	  Robot robot = new Robot();
+	  Thread.sleep(1000);
+	  
+	  //Nhan phim Enter
+	  robot.keyPress(KeyEvent.VK_ENTER);
+	  robot.keyRelease(KeyEvent.VK_ENTER);
+	  
+	  //Nhan xuong Ctrl + V
+	  robot.keyPress(KeyEvent.VK_CONTROL);
+	  robot.keyPress(KeyEvent.VK_V);
+	  
+	  //Nha phim Ctrl + V
+	  robot.keyRelease(KeyEvent.VK_CONTROL);
+	  robot.keyRelease(KeyEvent.VK_V);
+	  Thread.sleep(1000);
+	  
+	  //Nhan phim Enter lan nua
+	  robot.keyPress(KeyEvent.VK_ENTER);
+	  robot.keyRelease(KeyEvent.VK_ENTER);
+	  
+	  Thread.sleep(3000);
+	  
+	  Assert.assertTrue(driver.findElement(By.xpath("//tbody[@class='files']//p[@class='name' and text()='Image01.png']")).isDisplayed());
+	  
+	  
+  }
+  
+  public Object clickToElementByJS(WebElement element) {
+	  JavascriptExecutor js = (JavascriptExecutor) driver;
+	  return js.executeScript("arguments[0].click();", element);
   }
   
   @AfterClass
