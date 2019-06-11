@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -15,16 +16,18 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 
 public class Topic_14_UploadFile {
 	
   WebDriver driver;
-  String root_Folder_Path, image_01_Path, image_02_Path, image_03_Path;
+  String root_Folder_Path, image_01_Path, image_02_Path, image_03_Path, upload_File_Path;
   String image_01_Name = "Image01.png";
   String image_02_Name = "Image02.png";
   String image_03_Name = "Image03.png";
+  String upload_File_Name = "UploadFile.png";
   
   @BeforeClass
   public void beforeClass() {
@@ -36,10 +39,12 @@ public class Topic_14_UploadFile {
 	  image_01_Path = root_Folder_Path + "/uploadFiles/" + image_01_Name;
 	  image_02_Path = root_Folder_Path + "/uploadFiles/" + image_02_Name;
 	  image_03_Path = root_Folder_Path + "/uploadFiles/" + image_03_Name;
+	  upload_File_Path = root_Folder_Path + "/uploadFiles/" + upload_File_Name;
 	  
 	  System.out.println(image_01_Path);
 	  System.out.println(image_02_Path);
 	  System.out.println(image_03_Path);
+	  System.out.println(upload_File_Path);
   }
   
   //@Test
@@ -137,6 +142,52 @@ public class Topic_14_UploadFile {
   public Object clickToElementByJS(WebElement element) {
 	  JavascriptExecutor js = (JavascriptExecutor) driver;
 	  return js.executeScript("arguments[0].click();", element);
+  }
+  
+  @Test
+  public void TC_04() throws Exception {
+	//Step 1
+	  driver.get("https://encodable.com/uploaddemo/");
+	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	  
+	//Step 2
+	  WebElement browserButton = driver.findElement(By.xpath("//input[@name='uploadname1']"));
+	  browserButton.sendKeys(upload_File_Path);
+	  
+	//Step 3
+	  WebElement uploadFolderDropdown = driver.findElement(By.xpath("//select[@name='subdir1']"));
+	  Select select = new Select(uploadFolderDropdown);
+	  select.selectByVisibleText("/uploaddemo/files");
+	  
+	  //Step 4
+	  Random random = new Random();
+	  String s = random.toString(); 
+	  WebElement newFolderName = driver.findElement(By.xpath("//input[@id='newsubdir1']"));
+	  newFolderName.sendKeys(s);
+	  
+	  //Step 5
+	  WebElement emailTextbox = driver.findElement(By.xpath("//input[@id='formfield-email_address']"));
+	  emailTextbox.sendKeys("dam@gmail.com");
+	  WebElement firstNameTextbox = driver.findElement(By.xpath("//input[@id='formfield-first_name']"));
+	  firstNameTextbox.sendKeys("DAM DAO");
+	  
+	  //Step 6
+	  WebElement uploadButton = driver.findElement(By.xpath("//input[@id='uploadbutton']"));
+	  uploadButton.click();
+	  Thread.sleep(3000);
+	  
+	  //Step 7
+	  Assert.assertEquals(driver.findElement(By.xpath("//*[text()[contains(.,'Email Address: dam@gmail.com')]]")).getText(), "Email Address: dam@gmail.com");
+	  Assert.assertEquals(driver.findElement(By.xpath("//*[text()[contains(.,'First Name: DAM DAO')]]")).getText(), "First Name: DAM DAO");
+	  Assert.assertEquals(driver.findElement(By.xpath("//*[text()[contains(.,'UploadFile.png')]]")).getText(), "UploadFile.png");
+	  
+	  //Step 8
+	  WebElement viewUploadedFilesLink = driver.findElement(By.xpath("//div[@id='fcfooter-inner']//a[text()='View Uploaded Files']"));
+	  viewUploadedFilesLink.click();
+	  Thread.sleep(3000);
+	  
+	  //Step 9
+	  
   }
   
   @AfterClass
