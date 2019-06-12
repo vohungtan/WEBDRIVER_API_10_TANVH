@@ -47,7 +47,7 @@ public class Topic_14_UploadFile {
 	  System.out.println(upload_File_Path);
   }
   
-  //@Test
+  @Test
   public void TC_01_UploadFileBySendKeys() throws Exception {
 	  //Step 1
 	  driver.get("http://blueimp.github.com/jQuery-File-Upload/");
@@ -157,13 +157,13 @@ public class Topic_14_UploadFile {
 	//Step 3
 	  WebElement uploadFolderDropdown = driver.findElement(By.xpath("//select[@name='subdir1']"));
 	  Select select = new Select(uploadFolderDropdown);
-	  select.selectByVisibleText("/uploaddemo/files");
+	  select.selectByVisibleText("/uploaddemo/files/");
 	  
 	  //Step 4
-	  Random random = new Random();
-	  String s = random.toString(); 
-	  WebElement newFolderName = driver.findElement(By.xpath("//input[@id='newsubdir1']"));
-	  newFolderName.sendKeys(s);
+	  Random rd = new Random();
+	  int s = rd.nextInt(999); 
+	  String newFolderName = "tanvh" + s;
+	  driver.findElement(By.xpath("//input[@id='newsubdir1']")).sendKeys(newFolderName);
 	  
 	  //Step 5
 	  WebElement emailTextbox = driver.findElement(By.xpath("//input[@id='formfield-email_address']"));
@@ -172,6 +172,8 @@ public class Topic_14_UploadFile {
 	  firstNameTextbox.sendKeys("DAM DAO");
 	  
 	  //Step 6
+	  JavascriptExecutor js = (JavascriptExecutor) driver;
+	  js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
 	  WebElement uploadButton = driver.findElement(By.xpath("//input[@id='uploadbutton']"));
 	  uploadButton.click();
 	  Thread.sleep(3000);
@@ -186,13 +188,20 @@ public class Topic_14_UploadFile {
 	  viewUploadedFilesLink.click();
 	  Thread.sleep(3000);
 	  
-	  //Step 9
+	  //Step 9	  
+	  WebElement randomFolder = driver.findElement(By.xpath("//table[@id='filelist']//a[contains(text(),'tanvh')]"));
+	  randomFolder.click();
+	  Thread.sleep(3000);
+	  
+	  //Step 10
+	  Assert.assertEquals(driver.findElement(By.xpath("//table[@id='filelist']//a[text()='UploadFile.png']")).getText(), "UploadFile.png");
+	
 	  
   }
   
   @AfterClass
   public void afterClass() {
-	  //driver.quit();
+	  driver.quit();
   }
 
 }
