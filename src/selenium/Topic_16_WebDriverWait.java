@@ -21,7 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 
-public class Topic_16_WebDriverWait_II {
+public class Topic_16_WebDriverWait {
 	
   WebDriver driver;
   WebDriverWait waitExplicit;
